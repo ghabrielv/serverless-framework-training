@@ -22,12 +22,13 @@ const getUsers = async (event, context) => {
         KeyConditionExpression: 'pk = :pk',
         TableName: 'usersTable'
     };
-
+    
     return dynamodb.query(params).promise().then(res => {
         console.log(res)
+        user_info = res.Items[0]
         return {
             "statusCode": 200,
-            "body": JSON.stringify({ 'user': res})
+            "body": JSON.stringify({ 'user': user_info})
         }
     })
 }

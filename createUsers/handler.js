@@ -21,7 +21,6 @@ const createUsers = async (event, context) => {
     let userBody = JSON.parse(event.body)
 
     userBody.pk = id
-    userBody.active = 1
 
     var params = {
         TableName: 'usersTable',

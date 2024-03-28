@@ -22,10 +22,10 @@ const updateUsers = async (event, context) => {
     var params = {
         TableName: 'usersTable',
         Key: { pk: userId },
-        UpdateExpression: 'set #age = :age, #address = :address, #active = :active',
-        ExpressionAttributeNames: { '#age' : 'age', '#address' : 'address', '#active' : 'active'},
+        UpdateExpression: 'set #age = :age, #address = :address',
+        ExpressionAttributeNames: { '#age' : 'age', '#address' : 'address'},
         ExpressionAttributeValues:
-            { ':age' : body.age, ':address' : body.address, ':active' : body.active},
+            { ':age' : body.age, ':address' : body.address},
         ReturnValues: 'ALL_NEW'
     };
 

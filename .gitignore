@@ -11,6 +11,10 @@ node_modules/
 # Optional npm cache directory
 .npm
 
+# Python Files
+.venv/
+__pycache__/
+
 # System Files
 .DS_Store
 Thumbs.db

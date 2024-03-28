@@ -1,0 +1,300 @@
+{
+	"info": {
+		"_postman_id": "e3be482a-be85-47f4-8b74-e6a4d2424451",
+		"name": "serverless-framework",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2723379"
+	},
+	"item": [
+		{
+			"name": "Create user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Response status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content-Type header is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Validate the user object\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.user).to.exist.and.to.be.an('object');",
+							"    pm.expect(responseData.user.name).to.exist.and.to.be.a('string');",
+							"    pm.expect(responseData.user.age).to.exist.and.to.be.a('number');",
+							"    pm.expect(responseData.user.pk).to.exist.and.to.be.a('string');",
+							"",
+							"    pm.environment.set(\"user_id\", responseData.user.pk);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Name is a non-empty string\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData).to.be.an('object');",
+							"  pm.expect(responseData.user.name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Name should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Age is a non-negative integer\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.user.age).to.be.a('number').and.to.satisfy((age) => age >= 0, \"Age should be a non-negative integer\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Pedro\",\n    \"age\": 25\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/dev/users",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"dev",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content-Type header is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"User object should exist and have valid properties\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.user).to.exist;",
+							"    pm.expect(responseData.user.name).to.be.a('string');",
+							"    pm.expect(responseData.user.pk).to.be.a('string');",
+							"    pm.expect(responseData.user.age).to.be.a('number');",
+							"    pm.expect(responseData.user.status).to.be.a('number');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Name is a non-empty string\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData.user).to.be.an('object');",
+							"  pm.expect(responseData.user.name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Name should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Age and status are non-negative integers\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.user.age).to.be.a('number').and.to.satisfy((num) => num >= 0, \"Age should be a non-negative integer\");",
+							"    pm.expect(responseData.user.status).to.be.a('number').and.to.satisfy((num) => num >= 0, \"Status should be a non-negative integer\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{API_URL}}/dev/users/{{user_id}}",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"dev",
+						"users",
+						"{{user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields - name, address, pk, and age\", function () {",
+							"  const responseData = pm.response.json();",
+							"",
+							"  pm.expect(responseData).to.have.property('user');",
+							"  pm.expect(responseData.user).to.be.an('object');",
+							"  pm.expect(responseData.user).to.have.property('name');",
+							"  pm.expect(responseData.user).to.have.property('address');",
+							"  pm.expect(responseData.user).to.have.property('pk');",
+							"  pm.expect(responseData.user).to.have.property('age');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Name is a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.user.name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Name should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Address is a non-empty string\", function () {",
+							"  const responseData = pm.response.json();",
+							"  pm.expect(responseData.address).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Address should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Age is a non-negative integer\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData.user).to.exist;",
+							"  pm.expect(responseData.user.age).to.be.a('number').and.to.satisfy((age) => age >= 0, \"Age should be a non-negative integer\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Pedro\",\n    \"age\": 27,\n    \"address\": \"Venezuela\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/dev/users/{{user_id}}",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"dev",
+						"users",
+						"{{user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Response status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"",
+							"  pm.environment.unset(\"user_id\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has Content-Type header set to application/json\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Message in the response is not empty\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData.message).to.exist.and.to.not.be.empty;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Verify that the user with user_id is deleted from the system\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData.message).to.exist.and.to.be.a('string');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response body is a JSON object\", function () {",
+							"  const responseData = pm.response.json();",
+							"  pm.expect(responseData).to.be.an('object');",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{API_URL}}/dev/users/{{user_id}}",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"dev",
+						"users",
+						"{{user_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

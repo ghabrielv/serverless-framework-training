@@ -1,0 +1,32 @@
+service: hello-world
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+
+functions:
+  hello-world:
+    handler: handler.hello
+    events:
+      - http:
+          path: hello
+          method: GET
+
+plugins:
+  - serverless-localstack
+  - serverless-offline
+
+custom:
+  localstack:
+    stages:
+      - dev
+    host: http://localhost
+    edgePort: 4566
+    autostart: true
+    networks:
+      - host
+      - overlay
+    lambda:
+      mountCode: True
+    docker:
+      sudo: False

@@ -120,10 +120,11 @@ functions:
                 filename: true
   thumbGenerator:
     handler: thumbnail/handler.thumbnailGenerator
+    layers:
+      - { Ref: BaseLambdaLayer }
     package:
       patterns:
         - "thumbnail/handler.js"
-        - "node_modules/**"
     events:
       - s3:
           bucket: serverless-training-storage
@@ -131,6 +132,14 @@ functions:
           existing: true
           rules:
            - prefix: upload/
+
+layers:
+  base: 
+    name: "prod-dependencies"
+    compatibleRuntimes:
+      - "nodejs16.x"
+    package:
+      artifact: app/nodejs.zip
 
 resources:
   Resources:

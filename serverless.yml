@@ -9,6 +9,11 @@ provider:
         - Effect: Allow
           Action: "dynamodb:*"
           Resource: arn:aws:dynamodb:us-east-1:000000000000:table/usersTable
+        - Effect: Allow
+          Action: "s3:*"
+          Resource: arn:aws:s3:::serverless-training-storage/*
+  environment:
+    S3_BUCKET_NAME: serverless-training-storage
 
 plugins:
   - serverless-offline
@@ -99,6 +104,19 @@ functions:
             parameters:
               paths:
                 id: true
+  signedURL:
+    handler: signedurl/handler.signedS3URL
+    package:
+      patterns:
+        - "signedurl/handler.js"
+    events:
+      - http:
+          path: signed-url
+          method: GET
+          request:
+            parameters:
+              querystrings:
+                filename: true
 
 resources:
   Resources:
@@ -116,7 +134,7 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
     S3Bucket:
-      Type: 'AWS::S3::Bucket'
+      Type: "AWS::S3::Bucket"
       Properties:
         AccessControl: PublicRead
         BucketName: serverless-training-storage
@@ -128,11 +146,11 @@ resources:
           Version: "2012-10-17"
           Statement:
             - Action:
-                - 's3:GetObject'
+                - "s3:GetObject"
               Effect: Allow
               Resource: !Join
-                - ''
-                - - 'arn:aws:s3:::'
+                - ""
+                - - "arn:aws:s3:::"
                   - !Ref S3Bucket
                   - /*
-              Principal: '*'
+              Principal: "*"

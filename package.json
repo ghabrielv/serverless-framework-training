@@ -14,5 +14,8 @@
         "serverless-dynamodb": "^0.2.51",
         "serverless-localstack": "^1.2.0",
         "serverless-offline": "^13.3.3"
+    },
+    "dependencies": {
+        "sharp": "^0.33.3"
     }
 }

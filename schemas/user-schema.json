@@ -10,7 +10,7 @@
         "default": ""
       },
       "age": {
-        "description": "Age in years which must be equal to or greater than zero.",
+        "description": "Age in years which must be equal to or greater than eighteen.",
         "type": "integer",
         "minimum": 18,
         "default": ""
